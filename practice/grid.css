@@ -1,0 +1,13 @@
+.container{
+    background-color: bisque;
+    display: grid;
+    grid-row-gap: 10px;
+    grid-template-columns: auto auto auto;
+    grid-column-gap:10px ;
+    grid-template-rows: 100px 200px;
+
+}
+.box{
+    background-color: lightcoral;
+    border: 2px solid black;
+}

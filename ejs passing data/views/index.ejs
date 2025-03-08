@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name Letters</title>
+</head>
+
+<body>
+  <h1>Write your name below</h1>
+  <% if (numLetters) { %>
+    <h1>Your name has <%= numLetters %> letters</h1>
+  <% } %>
+  
+  <form action="/submit" method="POST">
+    <input type="text" name="fName" placeholder="First name" required>
+    <input type="text" name="lName" placeholder="Last name" required>
+    <input type="submit" value="OK">
+  </form>
+</body>
+
+</html>

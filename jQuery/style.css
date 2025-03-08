@@ -1,0 +1,9 @@
+.big-title{
+    font-size: 64px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: beige;
+}
+.margin-50{
+    padding-left:50px;
+    padding-right: 10px;
+}
