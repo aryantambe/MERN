@@ -7,33 +7,79 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function random_joke(){
+function random_joke() {
   const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
   return randomJoke;
 }
-app.get("/random",(req,res)=>{ //2. GET a random joke
-  const result=random_joke();
-  res.json(result);
-})
 
-app.get("/jokes/:id",(req,res)=>{ //2. GET a specific joke
-  const id=req.params.id;
-  const result=jokes[id-1];
+//2. GET a random joke
+app.get("/random", (req, res) => {
+  const result = random_joke();
   res.json(result);
-})
+});
+
+//2. GET a specific joke
+app.get("/jokes/:id", (req, res) => {
+  const id = req.params.id;
+  const result = jokes[id - 1];
+  res.json(result);
+});
 
 //3. GET a jokes by filtering on the joke type
-app.get("/filter",(req,res)=>{    
-  const joke_type=req.query.type;
-  const result=jokes.filter((joke)=>joke.jokeType===joke_type)
+app.get("/filter", (req, res) => {
+  const joke_type = req.query.type;
+  const result = jokes.filter((joke) => joke.jokeType === joke_type);
   res.json(result);
-})
-
+});
 
 //4. POST a new joke
+app.post("/jokes", (req, res) => {
+  const type = req.body.type;
+  const text = req.body.text;
+  const newJoke = {
+    id: jokes.length + 1,
+    jokeText: text,
+    jokeType: type,
+  };
+  jokes.push(newJoke);
+  console.log(jokes.slice(-1));
+  res.json(newJoke);
+});
+
 //5. PUT a joke
+app.put("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const type = req.body.type;
+  const text = req.body.text;
+
+  const replacedJoke = {
+    id: id,
+    jokeText: text,
+    jokeType: type,
+  };
+
+  const searchIndex = jokes.findIndex((joke) => joke.id === id);
+  jokes[searchIndex] = replacedJoke;
+  console.log(jokes[searchIndex]);
+  res.json(replacedJoke);
+});
 
 //6. PATCH a joke
+app.patch("/jokes/:id",(req,res)=>{
+  const id = parseInt(req.params.id);
+  const existingJoke = jokes.find((joke) => joke.id === id);
+  const replacedJoke={
+    id:id,
+    jokeText:req.body.text || existingJoke.text, //if the req does not include the text it just goes with the default text
+    jokeType:req.body.type || existingJoke.type, //same for the Joke type
+  };
+  const searchIndex = jokes.findIndex((joke) => joke.id === id);
+  jokes[searchIndex] = replacedJoke;
+  console.log(jokes[searchIndex]);
+  res.json(replacedJoke);
+
+
+})
 
 //7. DELETE Specific joke
 
