@@ -65,25 +65,49 @@ app.put("/jokes/:id", (req, res) => {
 });
 
 //6. PATCH a joke
-app.patch("/jokes/:id",(req,res)=>{
+app.patch("/jokes/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const existingJoke = jokes.find((joke) => joke.id === id);
-  const replacedJoke={
-    id:id,
-    jokeText:req.body.text || existingJoke.text, //if the req does not include the text it just goes with the default text
-    jokeType:req.body.type || existingJoke.type, //same for the Joke type
+  const replacedJoke = {
+    id: id,
+    jokeText: req.body.text || existingJoke.text, //if the req does not include the text it just goes with the default text
+    jokeType: req.body.type || existingJoke.type, //same for the Joke type
   };
   const searchIndex = jokes.findIndex((joke) => joke.id === id);
   jokes[searchIndex] = replacedJoke;
   console.log(jokes[searchIndex]);
   res.json(replacedJoke);
-
-
-})
+});
 
 //7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const id = req.params.id;
+
+  const searchIndex = jokes.findIndex((joke) => joke.id == id);
+  if (searchIndex > -1) {
+    jokes.splice(searchIndex, 1);
+    res.sendStatus(200);
+  } else {
+    res
+      .status(404)
+      .json(
+        `The joke with id ${id} does not exist. No jokes were deleted from the database`
+      );
+  }
+});
 
 //8. DELETE All jokes
+app.delete("/all", (req, res) => {
+  const userKey = req.query.key;
+  if (userKey === masterKey) {
+    jokes = []; //emptying the array
+    res.sendStatus(200);
+  } else {
+    res
+      .status(404)
+      .json({ error: `You are not authorised to perform this action.` });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
