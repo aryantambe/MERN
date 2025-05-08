@@ -40,7 +40,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Write your code here//
 
-//CHALLENGE 1: GET All posts
+app.get("/all",(req,res)=>{
+  
+})
 
 //CHALLENGE 2: GET a specific post by id
 
