@@ -9,7 +9,7 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "permalist",
-  password: "123456",
+  password: "Aryan@2004",
   port: 5432,
 });
 db.connect();
@@ -71,4 +71,5 @@ app.post("/delete", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`http://localhost:${port}`)
 });
