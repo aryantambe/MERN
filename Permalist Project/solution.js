@@ -4,6 +4,12 @@ import pg from "pg";
 
 const app = express();
 const port = 3000;
+const today = new Date();
+const day = String(today.getDate()).padStart(2, '0');
+const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+const year = today.getFullYear();
+
+const formatted = `${day}-${month}-${year}`;
 
 const db = new pg.Client({
   user: "postgres",
@@ -28,7 +34,7 @@ app.get("/", async (req, res) => {
     items = result.rows;
 
     res.render("index.ejs", {
-      listTitle: "Today",
+      listTitle: formatted,
       listItems: items,
     });
   } catch (err) {
