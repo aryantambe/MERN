@@ -36,7 +36,7 @@ app.post("/register", async (req, res) => {
     [email, password]
   ); //inserting the registered usernames in the database
   console.log(result);
-  res.render("secrets.ejs");
+  res.render("secrets.ejs"); //rendering the ejs file after successfull registration
 });
 
 app.post("/login", async (req, res) => {
