@@ -55,17 +55,25 @@ app.post("/login", async (req, res) => {
   let email = req.body.username;
   let password = req.body.password;
 
-  const result=await db.query("SELECT * FROM users WHERE email=$1",[email]);  
-  if(result.rowCount>0){
-    const pass=result.rows[0].password;
-    if(pass==password){
-      res.render("secrets.ejs");
+   try {
+    const result = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+      const storedPassword = user.password;
+
+      if (password === storedPassword) {
+        res.render("secrets.ejs");
+      } else {
+        res.send("Incorrect Password");
+      }
+    } else {
+      res.send("User not found");
     }
-    else{
-      res.json("Incorrect password");
-    }
+  } catch (err) {
+    console.log(err);
   }
-      res.json("Error while loggin in");
 
 });
 
