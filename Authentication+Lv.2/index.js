@@ -1,15 +1,17 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import bcrypt from "bcrypt";
 
 const app = express();
 const port = 3000;
+const saltRounds = 10; //no. of times salting is done
 
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "secrets",
-  password: "123456",
+  password: "Aryan@2004",
   port: 5432,
 });
 db.connect();
@@ -41,12 +43,17 @@ app.post("/register", async (req, res) => {
     if (checkResult.rows.length > 0) {
       res.send("Email already exists. Try logging in.");
     } else {
-      const result = await db.query(
-        "INSERT INTO users (email, password) VALUES ($1, $2)",
-        [email, password]
-      );
-      console.log(result);
-      res.render("secrets.ejs");
+      //Password hashing
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          console.log("Error while hashing", err);
+        }
+        const result = await db.query(
+          "INSERT INTO users (email, password) VALUES ($1, $2)",
+          [email, hash]
+        );
+        res.render("secrets.ejs");
+      });
     }
   } catch (err) {
     console.log(err);
@@ -80,4 +87,5 @@ app.post("/login", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`http://localhost:${port}`);
 });
